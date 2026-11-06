@@ -16,13 +16,14 @@
     <!-- Sidebar -->
     <aside class="sidebar">
       <div class="sidebar-logo">
-        <img class="faceavatar" src="/assets/logo.png" alt="Logo" />
+        <img class="faceavatar" id="faceavatar" src="/assets/pfp.png" alt="Profile Picture" />
       </div>
       <nav class="sidebar-nav">
         <a href="dashboard.html">Dashboard</a>
         <a href="roommates.html" class="active">Roommates</a>
         <a href="tasks.html">Tasks</a>
         <a href="financial.html">Financial</a>
+        <a href="settings.html">Settings</a>
       </nav>
     </aside>
 
@@ -52,7 +53,7 @@
       </header>
 
       <!-- Dashboard Grid -->
-      <div class="dashboard-grid">
+      <div class="roommate-grid">
         <!-- Today's Tasks -->
         <section class="card names-card">
           <h2>Roommates</h2>
@@ -60,9 +61,6 @@
             <!-- Populated by JS -->
           </div>
         </section>
-
-      </div>
-      <div class="dashboard-grid">
         <!-- Today's Tasks -->
         <section class="card tasks-card">
           <h2>Roommate Tasks</h2>
@@ -121,7 +119,7 @@
 
     <div id="alertModal" class="modal" style="display: none;">
       <div class="modal-content">
-        <h3 id="alertBody">Successful deleted the groups</h3>
+        <h3 id="alertBody"></h3>
         <button class="confirm-button" id="okButton" onclick="closeModal('alertModal')">OK</button>
       </div>
 

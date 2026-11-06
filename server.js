@@ -1,12 +1,14 @@
 const express = require("express");
-const cors = require("cors");
 const path = require("path");
+const cors = require("cors");
 require("dotenv").config();
 const authRoutes = require("./routes/Auth");
 const taskRoutes = require("./routes/tasks");
 const groupRoutes = require("./routes/groups");
 const expenseRoutes = require("./routes/expenses");
 const notificationRoutes = require("./routes/notifications");
+const uploadRoutes = require('./routes/uploads');
+const geminiRoute = require('./routes/geminiRoute')
 const cookieParser = require("cookie-parser");
 
 const connectDB = require("./db/connect");
@@ -26,12 +28,14 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "login.html"));
 });
 
-//Routes
+// Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/groups", groupRoutes);
 app.use("/api/expenses", expenseRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use('/api/gemini', geminiRoute)
+app.use('/api/uploads', uploadRoutes);
 // Handle client-side routing
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "error404.html"));

@@ -1,6 +1,6 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const { SignJWT } = require("jose");
 
 const registerUser = async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -39,15 +39,18 @@ const login = async (req, res) => {
 
     // Compare password
     //IMPORTANT CHANGE
-    // const isMatch = await bcrypt.compare(password, user.password);
-    const isMatch = true
+    const isMatch = await bcrypt.compare(password, user.password);
+    //const isMatch = true
     if (!isMatch)
       return res.status(400).json({ message: "Invalid credentials" });
 
     // Create JWT token
-    const token = jwt.sign({ userID: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+    const token = await new SignJWT({ userID: user._id.toString() })
+      .setProtectedHeader({ alg: "HS256" })
+      .setIssuedAt()
+      .setExpirationTime("1d")
+      .sign(secret);
     console.log("Logged in Successfully");
     res.cookie("token", token, {
       httpOnly: true,
@@ -93,4 +96,24 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, login, findUser, getAllUsers };
+const updateUser = async (req, res) => {
+  const {name, email, userId} = req.body
+  try{
+    const user = await User.updateOne(
+      {_id:userId},
+      {$set:{name:name, email:email}}
+    )
+    const updatedInfo = await User.findById(userId)
+    res.status(200).json({
+      id: updatedInfo._id,
+      name: updatedInfo.name,
+      email: updatedInfo.email
+    });
+    
+  }
+  catch(error){
+    console.error(error)
+  }
+}
+
+module.exports = { registerUser, login, findUser, getAllUsers, updateUser };

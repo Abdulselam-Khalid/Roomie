@@ -13,13 +13,19 @@
       <!-- Sidebar -->
       <aside class="sidebar">
         <div class="sidebar-logo">
-          <img class="faceavatar" src="/assets/logo.png" alt="Logo" />
+          <img
+            class="faceavatar"
+            id="faceavatar"
+            src="/assets/pfp.png"
+            alt="Profile Picture"
+          />
         </div>
         <nav class="sidebar-nav">
           <a href="dashboard.html">Dashboard</a>
           <a href="roommates.html">Roommates</a>
           <a href="tasks.html">Tasks</a>
           <a href="financial.html" class="active">Financial</a>
+          <a href="settings.html">Settings</a>
         </nav>
       </aside>
 
@@ -55,7 +61,7 @@
 
         <!-- Add Transaction -->
         <div
-          class="dashboard-grid"
+          class="financial-grid"
           style="min-width: max-content; max-height: fit-content"
         >
           <!-- Recent Transactions -->
@@ -63,15 +69,6 @@
             <h2>Recent Transactions</h2>
             <div class="table-container">
               <table class="members-table">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Description</th>
-                    <th>Category</th>
-                    <th>Amount</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
                 <tbody id="transactions-list">
                   <!-- Populated by JS -->
                 </tbody>
@@ -80,6 +77,9 @@
             <button id="showTransactionForm" class="add-button toggle-button">
               +
             </button>
+          </section>
+          <section id="history-section">
+            
           </section>
         </div>
       </div>
@@ -92,11 +92,12 @@
         >
         <h3>Add Transaction</h3>
 
-        <select class="primaryInput" id="transaction-type" required>
-          <option value="">Type of transaction</option>
-          <option value="income">Income</option>
-          <option value="expense">Expense</option>
-        </select>
+        <input
+          type="text"
+          class="primaryInput"
+          id="transaction-title"
+          placeholder="Title"
+        />
 
         <input
           class="primaryInput"
@@ -109,29 +110,63 @@
 
         <select class="primaryInput" id="transaction-category" required>
           <option value="">Category</option>
-          <option value="rent">Rent</option>
-          <option value="utilities">Utilities</option>
-          <option value="groceries">Groceries</option>
-          <option value="other">Other</option>
+          <option value="Rent">Rent</option>
+          <option value="Utilities">Utilities</option>
+          <option value="Groceries">Groceries</option>
+          <option value="Other">Other</option>
         </select>
+
+        <fieldset class="primaryInput">
+          <legend>Split Between:</legend>
+          <div id="roommate-checkbox-container"></div>
+          <label class="label-splitBetween primaryInput">
+            <input type="checkbox" id="select-all" value="all" /> All Roommates
+          </label>
+        </fieldset>
 
         <input
           class="primaryInput"
-          type="text"
-          id="transaction-description"
-          placeholder="Description"
+          type="date"
+          id="transaction-dueDate"
+          placeholder="Due Date"
           required
         />
 
         <button
           id="addTransactionButton"
           class="add-button"
-          onclick="submitNewTask()"
+          onclick="submitNewTransaction()"
         >
           Add
         </button>
       </div>
     </div>
+
+    <!-- Alert Modal -->
+    <div id="alertModal" class="modal" style="display: none">
+      <div class="modal-content">
+        <h3 id="alertBody"></h3>
+        <button
+          class="confirm-button"
+          id="okButton"
+          onclick="closeModal('alertModal')"
+        >
+          OK
+        </button>
+      </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div id="confirmModal" class="modal" style="display:none;">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('confirmModal')">&times;</span>
+        <h3 id="confirmHeader"></h3>
+        <p id="confirmMessage" style="margin: 10px;"></p>
+        <button class="confirm-button" id="confirmYes">Yes</button>
+        <button class="confirm-button" id="confirmNo">No</button>
+      </div>
+    </div>
+
     <!-- Load scripts -->
     <script
       src="https://kit.fontawesome.com/0e39b0b64f.js"
