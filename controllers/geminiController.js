@@ -2,7 +2,7 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 require("dotenv").config();
 
 const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+const model = genAI.getGenerativeModel({ model: "gemini-3.8-flash" });
 const chat = model.startChat();
 
 const externalContext = `
@@ -26,7 +26,6 @@ const startChat = async (req, res) => {
     const fullPrompt = `${externalContext}\nUser Query: ${prompt}`;
     const result = await chat.sendMessage(fullPrompt);
     const chatReply = result.response.text();
-
     res.json({ result: chatReply });
   } catch (error) {
     console.error(error);
